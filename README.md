@@ -1,0 +1,1 @@
+bitmez umarıma tıkla
