@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handemm ❤️</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{
+  background:linear-gradient(120deg,#1a0000,#330000);
+  overflow:hidden;
+  color:white;
+  text-align:center;
+}
+
+/* KALPLER */
+.heart{
+  position:fixed;
+  top:-10px;
+  color:red;
+  z-index: 1;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+
+/* LOADING */
+#loading{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:999;
+}
+#loading img{width:200px;border-radius:20px}
+
+/* MENU */
+#menu{display:none;padding-top:40px; position: relative; z-index: 10;}
+#menu img{
+  width:180px;
+  border-radius:20px;
+  margin:20px 0;
+}
+button{
+  padding:15px 30px;
+  margin:10px;
+  font-size:18px;
+  border:none;
+  border-radius:30px;
+  background:red;
+  color:white;
+  cursor: pointer;
+}
+
+/* SECTIONS */
+.section{display:none;padding:20px; position: relative; z-index: 10;}
+
+/* GALERİ */
+.slider{
+  max-height:65vh;
+  overflow-y:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:15px;
+}
+.slider img,.slider video{
+  width:100%;
+  border-radius:20px;
+}
+
+/* TIMER */
+#timer{font-size:24px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px;}
+
+/* 🎮 GAME AREA (Geliştirildi) */
+#gameArea{
+  position:relative;
+  width:320px;
+  height:400px; /* Alan uzatıldı */
+  background:#1a0000;
+  margin:10px auto;
+  border-radius:20px;
+  overflow: hidden;
+  border: 3px solid #ff4d4d;
+  box-shadow: 0 0 20px rgba(255,0,0,0.2);
+}
+#boy,#girl{
+  width:45px;
+  position:absolute;
+  touch-action:none;
+  z-index: 20;
+  transition: transform 0.1s;
+}
+.obstacle{
+  position:absolute;
+  background:linear-gradient(90deg, #ff4d4d, #990000);
+  border-radius:10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* Bölüm Sonu */
+#win{display:none; animation: fadeIn 1s;}
+#win img{width:250px; border-radius:20px; box-shadow: 0 0 30px red;}
+
+@keyframes fadeIn{from{opacity:0} to{opacity:1}}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" src="sana.mp3" loop></audio>
+
+<div id="loading">
+  <img src="6.jpeg">
+  <p style="font-size: 24px; margin-top: 20px;">Bizim hikâyemiz başlıyor… ❤️</p>
+</div>
+
+<div id="menu">
+  <h1>Handemm ❤️</h1>
+  <img src="1.jpeg">
+  <p>09.05.2025</p>
+  <button onclick="openSection('memories')">Anılarımız</button>
+  <button onclick="openSection('time')">Zamanımız</button>
+  <button onclick="openSection('game')">Aşk Yolu</button>
+</div>
+
+<div id="memories" class="section">
+  <h2>Anılarımız 💕</h2>
+  <div class="slider">
+    <img src="1.jpeg"><img src="2.jpeg"><img src="3.jpeg">
+    <img src="4.jpeg"><img src="5.jpeg"><img src="6.jpeg"><img src="7.jpeg">
+    <img src="8.jpeg">
+    <video src="10.mp4" controls></video>
+  </div>
+  <button onclick="back()">Geri</button>
+</div>
+
+<div id="time" class="section">
+  <h2>Birlikte Geçen Zaman ⏳</h2>
+  <div id="timer"></div>
+  <button onclick="back()">Geri</button>
+</div>
+
+<div id="game" class="section">
+  <h3>Zorlu Aşk Yolu 🎮</h3>
+  <p style="font-size: 14px; margin-bottom: 10px;">Engellere çarpmadan en alttaki bana ulaş!</p>
+
+  <div id="gameArea">
+    <div class="obstacle" style="top:70px; left:0; width:220px; height:15px;"></div>
+    <div class="obstacle" style="top:140px; right:0; width:220px; height:15px;"></div>
+    <div class="obstacle" style="top:210px; left:0; width:220px; height:15px;"></div>
+    <div class="obstacle" style="top:280px; right:0; width:220px; height:15px;"></div>
+    
+    <div class="obstacle" style="top:340px; left:110px; width:100px; height:15px;"></div>
+
+    <img id="girl" src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png" style="top:10px; left:10px;">
+    <img id="boy" src="https://cdn-icons-png.flaticon.com/512/2922/2922561.png" style="bottom:10px; right:10px;">
+  </div>
+
+  <div id="win">
+    <h2>Sana Kavuştum! ❤️</h2>
+    <img src="9.jpeg">
+  </div>
+  <button onclick="back()">Geri</button>
+</div>
+
+<script>
+/* ❤️ Kalpler */
+for(let i=0;i<20;i++){
+ let h=document.createElement("div");
+ h.className="heart";
+ h.innerHTML="❤️";
+ h.style.left=Math.random()*100+"vw";
+ h.style.fontSize=15+Math.random()*20+"px";
+ h.style.animationDuration=4+Math.random()*6+"s";
+ document.body.appendChild(h);
+}
+
+setTimeout(()=>{
+ document.getElementById("loading").style.display="none";
+ document.getElementById("menu").style.display="block";
+},3000);
+
+document.body.addEventListener("click",()=>{
+ document.getElementById("bgMusic").play();
+},{once:true});
+
+function openSection(id){
+ document.getElementById("menu").style.display="none";
+ document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+ document.getElementById(id).style.display="block";
+ if(id==="game") startGame();
+}
+
+function back(){
+ document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+ document.getElementById("menu").style.display="block";
+}
+
+const startDate=new Date("2025-05-09");
+setInterval(()=>{
+ const now=new Date();
+ const diff=now-startDate;
+ const d=Math.floor(diff/86400000);
+ const h=Math.floor(diff/3600000)%24;
+ const m=Math.floor(diff/60000)%60;
+ const s=Math.floor(diff/1000)%60;
+ document.getElementById("timer").innerHTML= `${d} gün ${h} saat<br>${m} dakika ${s} saniye`;
+},1000);
+
+/* 🎮 GELİŞMİŞ OYUN MANTIĞI */
+const girl=document.getElementById("girl");
+const boy=document.getElementById("boy");
+const area=document.getElementById("gameArea");
+const obstacles=document.querySelectorAll(".obstacle");
+const win=document.getElementById("win");
+let running=false;
+
+function startGame(){
+ running=true;
+ win.style.display="none";
+ area.style.display="block";
+ girl.style.left="10px";
+ girl.style.top="10px";
+}
+
+function handleMove(e) {
+  if(!running) return;
+  
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+  const r = area.getBoundingClientRect();
+  let x = clientX - r.left - 22;
+  let y = clientY - r.top - 22;
+
+  // Sınırlar
+  x = Math.max(0, Math.min(area.offsetWidth - 45, x));
+  y = Math.max(0, Math.min(area.offsetHeight - 45, y));
+
+  girl.style.left = x + "px";
+  girl.style.top = y + "px";
+
+  // Engel Çarpışma
+  obstacles.forEach(o => {
+    if(collision(girl, o)){
+      // Yanarsa başa dön
+      girl.style.left = "10px";
+      girl.style.top = "10px";
+    }
+  });
+
+  // Hedef Çarpışma
+  if(collision(girl, boy)){
+    running = false;
+    area.style.display = "none";
+    win.style.display = "block";
+  }
+}
+
+area.addEventListener("mousemove", handleMove);
+area.addEventListener("touchmove", (e) => {
+  handleMove(e);
+  e.preventDefault();
+}, {passive: false});
+
+function collision(a, b){
+ const r1 = a.getBoundingClientRect();
+ const r2 = b.getBoundingClientRect();
+ // Çarpışma alanını daha hassas yaptık
+ return !(r1.right < r2.left + 8 || r1.left > r2.right - 8 || r1.bottom < r2.top + 8 || r1.top > r2.bottom - 8);
+}
+</script>
+
+</body>
+</html>
